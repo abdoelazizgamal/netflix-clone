@@ -3,7 +3,7 @@
     background-size: cover;
     background-position: center center;
     position: relative;
-    height: 448px;
+    height: 550px;
     color: white;
     object-fit: contain;
     display: flex;
@@ -57,7 +57,7 @@
 }
 .banner__button:hover
 {
-    color: #000;
-    background-color: #fff;
+    color: #fff;
+    background-color: #e74c3c;
     transition: all .2s;
 }

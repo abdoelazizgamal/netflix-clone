@@ -1,0 +1,138 @@
+.movie-details.container
+{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 70px;
+    padding-top: 50px;
+}
+.img-details
+{
+    width: 30%;
+}
+.img-details img
+{
+    width: 100%;
+    box-shadow: 0.5em 1em 1em rgb(10 10 10);
+    border-radius: 20px;
+    object-fit: cover;
+}
+.movie-info
+{
+    width: 65%;
+    color: #fff;
+}
+.movie-info > * 
+{
+    border-bottom: 1px solid  #1c1b1b;
+    padding: 15px 0;
+}
+.movie-info > * 
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.movie-info > * span:first-of-type,
+.movie-info >  * b
+{
+    margin-right: 15px;
+}
+.geners
+{
+    justify-content: flex-start;
+    gap: 15px;
+}
+.geners button
+{
+    outline: none;
+    border: none;
+    background-color: #e50914;
+    color: #fff;
+    padding: 7px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.geners button span
+{
+    margin-right: 5px !important;
+    animation: point 1s ease-in-out alternate-reverse infinite;
+    position: relative;
+}
+@keyframes point
+{
+    0%{
+        right: 0;
+    }
+    100%
+    {
+        right: 5px;
+    }
+}
+.actors
+{
+    display: flex;
+    gap: 20px 15px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.actors > h4
+{
+    width: 100%;
+}
+.actors .actor
+{
+    cursor: pointer;
+}
+.actors .actor img
+{
+    width: 100px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.actor h5,
+.actor h6
+{
+    max-width: 100px;
+}
+.actor .text-light
+{
+    color: #757575;
+}
+.actor-movies-title
+{
+    color: #fff;
+    margin-top: 20px;
+}
+.actor-movies.container
+{
+    margin-top: 30px;
+}
+.keen-slider__slide
+{
+    display: flex;
+    height: 300px;
+    padding: 15px ;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.number-slide
+{
+    
+    background: rgb(229, 9, 20);
+  background: linear-gradient(
+    128deg,
+    rgba(255, 63, 63, 1) 0%
+    rgba(229, 9,20, .5) 50%
+  );
+}
+.keen-slider__slide img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

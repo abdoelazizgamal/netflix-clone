@@ -1,34 +1,24 @@
 .row.container
 {
   color: white;
-  /* margin-bottom: 40px; */
+  margin-bottom: 50px;
 }
-.row__posters
-{
- /* width: 100%; */
 
-}
-.row__posters::-webkit-scrollbar
+.row.container h2
 {
-    /* display: none; */
+  margin-bottom: 10px;
 }
-.row__posters .row__poster
-{
-    /* max-height: 100px;
-    object-fit: contain;
-    margin-right: 10px;
-    width: 100%; */
 
-} 
-.row__posters .row__poster__large
-{
-    /* max-height: 250px; */
-}
+
+
 .zoom-out {
     perspective: 1000px;
     height: 200px;
   }
-  
+  .row__poster__large
+{
+    height: 300px;
+}
   .zoom-out__slide div {
     position: absolute;
     width: 100%;
@@ -41,5 +31,34 @@
     height: 100%;
     object-fit: cover;
     position: absolute;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .zoom-out__slide .movie-name
+  {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height:auto;
+    z-index: 2;
+    background-color: rgba(0,0, 0, .6);
+    min-height: 100px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    border-top-right-radius: 100px;
+    cursor: pointer;
+    transform: translateY(100%);
+    transition: .5s transform ease-in-out;
   }
   
+  .zoom-out__slide .movie-name h5
+  {
+        font-size: .9rem;
+        
+  }
+  .zoom-out__slide:hover .movie-name
+  {
+    transform: none;
+  }

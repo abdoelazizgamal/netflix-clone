@@ -1,45 +1,25 @@
 import { useEffect, useState } from "react";
 import instance from "../axios";
-import Requests from "../Requests";
+
 import "../style/Row.css";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
+import { useNavigate } from "react-router-dom";
+import { base_url } from "../Constant";
+// import Loader from "./Loader";
 
-const base_url = "https://image.tmdb.org/t/p/original/";
 const Row = ({ title, fetchUrl, isLargeRow = false }) => {
   const [movies, setMovies] = useState([]);
+  // const [loaded, setLoaded] = useState(false);
   const [details, setDetails] = useState(null);
-
-  const [sliderRef] = useKeenSlider({
-    initial: 0,
-    breakpoints: {
-      "(min-width: 996px)": {
-        slides: {
-          perView: 7,
-          spacing: 15,
-        },
-      },
-      "(max-width: 996px)": {
-        slides: {
-          perView: 4,
-          spacing: 15,
-        },
-      },
-    },
-    loop: true,
-    detailsChanged(s) {
-      setDetails(s.track.details);
-    },
-    // created() {
-    //   console.log("slide created");
-    // },
-  });
-
+  const [options, setOptions] = useState({});
+  const [sliderRef] = useKeenSlider(options);
+  const navigate = useNavigate();
   function scaleStyle(idx) {
     if (!details) return {};
     const slide = details.slides[idx];
     const scale_size = 0.7;
-    const scale = 1 - (scale_size - scale_size * slide.portion);
+    const scale = 1 - (scale_size - scale_size * slide?.portion);
     return {
       transform: `scale(${scale})`,
       WebkitTransform: `scale(${scale})`,
@@ -47,24 +27,72 @@ const Row = ({ title, fetchUrl, isLargeRow = false }) => {
   }
   useEffect(() => {
     const fetchMovies = async () => {
-      const response = await instance.get(Requests.fetchNetflixOriginals);
+      const response = await instance.get(fetchUrl);
       setMovies(response.data.results);
+      setOptions({
+        initial: 0,
+        breakpoints: {
+          "(max-width: 776px)": {
+            slides: {
+              perView: 2,
+              spacing: 15,
+            },
+          },
+          "(min-width: 776px)": {
+            slides: {
+              perView: 4,
+              spacing: 15,
+            },
+          },
+          "(min-width: 1200px)": {
+            slides: {
+              perView: 6,
+              spacing: 15,
+            },
+          },
+        },
+        loop: true,
+        detailsChanged(s) {
+          setDetails(s.track.details);
+        },
+      });
+
       return response;
     };
     fetchMovies();
-  }, []);
+    return () => {
+      setOptions({});
+    };
+  }, [fetchUrl]);
 
+  const handleNaV = (id) => {
+    navigate(`/movie/${id}`);
+  };
   //   console.log(movies);
   return (
     <div className="row container">
       <h2>{title}</h2>
 
-      <div ref={sliderRef} className="keen-slider zoom-out row__posters">
+      <div
+        ref={sliderRef}
+        className={`keen-slider zoom-out row__posters ${
+          isLargeRow && "row__poster__large"
+        }`}
+      >
         {movies?.map((movie, index) => (
-          <div key={movie?.id} className="keen-slider__slide  zoom-out__slide">
+          <div
+            key={movie?.id}
+            className="keen-slider__slide  zoom-out__slide"
+            onClick={() => handleNaV(movie?.id)}
+          >
+            <div className="movie-name">
+              <h5>{movie?.title || movie?.original_title}</h5>
+            </div>
             <div style={scaleStyle(index)}>
+              {/* {loaded ? null : <Loader />} */}
               <img
-                className={`row__poster ${isLargeRow && "row__poster__large"}`}
+                // className={`row__poster ${!loaded && "hidden"}`}
+                className={`row__poster`}
                 src={
                   movie.poster_path && movie?.backdrop_path
                     ? `${base_url}${
@@ -72,7 +100,9 @@ const Row = ({ title, fetchUrl, isLargeRow = false }) => {
                       }`
                     : "https://www.telkomsel.com/sites/default/files/product_banner_image/netflix-right-LANDING.png"
                 }
-                alt={movie?.name}
+                alt={movie?.title}
+                // onLoad={() => setLoaded(true)}
+                loading="lazy"
               />
             </div>
           </div>
