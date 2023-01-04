@@ -1,29 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import instance from "../axios";
+
 import { notifyErorr } from "../helpers/Toast";
+import useAxios from "../hooks/useAxios";
 import Requests from "../Requests";
 import "../style/SideBar.css";
 import GenersList from "./GenersList";
+import Error from "./Error";
+import FormSearchInput from "./FormSearchInput";
 const SideBar = ({ showSidebar, setShowSidebar }) => {
   const [searchValue, setSearchValue] = useState("");
   const sidebar = useRef();
   const backdrop = useRef();
   const navigate = useNavigate();
-  const [FilmsGeneres, setFilmsGeneres] = useState([]);
-  const [TvGeneres, setTvGeneres] = useState([]);
+  const {
+    data: moviesGenresList,
+    error: errorMoviesGenresList,
+    doFetch: fetchMoviesGenresList,
+  } = useAxios();
+  const {
+    data: tvGenresList,
+    error: tvErrorGenresList,
+    doFetch: fetchTvGenresList,
+  } = useAxios();
+  // console.log(moviesGenresList, tvGenresList);
   useEffect(() => {
-    const fetchGenersList = async () => {
-      const FilmsGeneresList = await instance.get(Requests.fetchGenersList);
-      const TvGeneresList = await instance.get(Requests.fetchGenersTvList);
-      setFilmsGeneres(FilmsGeneresList?.data?.genres);
-      setTvGeneres(TvGeneresList?.data?.genres);
-    };
-    fetchGenersList();
-  }, []);
+    fetchMoviesGenresList(Requests.fetchGenersList);
+    fetchTvGenresList(Requests.fetchGenersTvList);
+  }, [fetchMoviesGenresList, fetchTvGenresList]);
   useEffect(() => {
     if (showSidebar === false) {
-      //   return { transform: "translateX(100%)" };
       backdrop.current.classList.add("hidden");
       sidebar.current.classList.remove("active");
       document.body.classList.remove("overflow-hidden");
@@ -58,17 +64,22 @@ const SideBar = ({ showSidebar, setShowSidebar }) => {
           >
             ❌
           </button>
-          <form onSubmit={handleSubmit} className="search-form">
-            <input
-              type="text"
-              value={searchValue}
-              placeholder="Type to search"
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <button type="submit">Search</button>
-          </form>
-          <GenersList list={FilmsGeneres} title="Film's Categories" />
-          <GenersList list={TvGeneres} title="TV Show's Categories" />
+          <FormSearchInput
+            handleSubmit={handleSubmit}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+          />
+
+          <GenersList
+            list={moviesGenresList?.genres}
+            title="Film's Categories"
+          />
+          <Error error={errorMoviesGenresList} />
+          <GenersList
+            list={tvGenresList?.genres}
+            title="TV Show's Categories"
+          />
+          <Error error={tvErrorGenresList} />
         </div>
       </div>
     </>

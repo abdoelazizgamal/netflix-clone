@@ -22,3 +22,13 @@ img
 {
   box-shadow: none;
 }
+
+.container.error
+{
+  background-color: #282c2d;
+  margin: 10px 0;
+  padding: 10px;
+  color: #e50914;
+  border-radius: 3px;
+  box-shadow:  0 0 2px rgb(212 201 201 / 95%);
+}

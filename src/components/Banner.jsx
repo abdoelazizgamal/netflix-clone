@@ -17,7 +17,7 @@ const Banner = () => {
       const response = await instance.get(Requests.fetchPopular);
       const randomMovie =
         response.data.results[
-          Math.floor(Math.random() * response.data.results.length - 1)
+          Math.floor(Math.random() * response?.data?.results?.length - 1)
         ];
       const movie = await instance.get(Requests.fetchMovie(randomMovie?.id));
       setMovie(movie.data);

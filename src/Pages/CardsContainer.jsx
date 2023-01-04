@@ -1,7 +1,7 @@
 import Card from "../components/Card";
 import Loader from "../components/Loader";
 const CardsContainer = ({ data, style }) => {
-  if (!(data.length > 0)) <Loader />;
+  if (!(data?.length > 0)) <Loader />;
   return (
     <>
       <div className="cards-container container" style={{ ...style }}>
