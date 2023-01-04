@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import HomeScreen from "./Pages/HomeScreen";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import LoginScreen from "./Pages/LoginScreen";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,10 +18,13 @@ import "./style/App.css";
 import ProfileScreen from "./Pages/ProfileScreen";
 import MovieDetailsScreen from "./Pages/MovieDetailsScreen";
 import ActorDetailsScreen from "./Pages/ActorDetailsScreen";
+import Category from "./Pages/Category";
+import SearchPage from "./Pages/SearchPage";
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useUserSelector();
+  const { pathname } = useLocation();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -32,11 +41,10 @@ function App() {
   }, [navigate, dispatch]);
   useEffect(() => {
     window.scrollTo(0, 0);
-  });
+  }, [pathname]);
   return (
     <div className="app">
       <ToastContainer />
-
       {!user ? (
         <LoginScreen />
       ) : (
@@ -44,11 +52,13 @@ function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/movie/:id" element={<MovieDetailsScreen />} />
+          <Route path="/tv/:id" element={<MovieDetailsScreen />} />
           <Route path="/actor/:id" element={<ActorDetailsScreen />} />
-          <Route path="/*" element={<Navigate to="/" />} />
+          <Route path="/:type/category/:id" element={<Category />} />
+          <Route path="/search/:term" element={<SearchPage />} />
+          {/* <Route path="/*" element={<Navigate to="/" />} /> */}
         </Routes>
       )}
-      {/* {user && <Route path="/" element={<HomeScreen />} />} */}
     </div>
   );
 }

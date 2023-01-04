@@ -3,15 +3,24 @@ import "keen-slider/keen-slider.min.css";
 import { useEffect, useState } from "react";
 import { base_url } from "../Constant";
 import { useNavigate, useParams } from "react-router-dom";
+import instance from "../axios";
+
+import Loader from "./Loader";
 
 const animation = { duration: 10000, easing: (t) => t };
-const ActorMovies = ({ movies }) => {
+const ActorMovies = ({ fetchUrl, name, tv = false }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [movies, setMovies] = useState([]);
+
   const [optionsConfig, setOptionsConfig] = useState({});
   const [sliderRef] = useKeenSlider(optionsConfig);
   useEffect(() => {
-    const SET_ID = setTimeout(() => {
+    const handleMovies = async (id) => {
+      const actorFilms = await instance.get(fetchUrl);
+
+      if (tv) setMovies(actorFilms.data.cast);
+      else setMovies(actorFilms.data.results);
       setOptionsConfig({
         loop: true,
         initial: 0,
@@ -41,35 +50,43 @@ const ActorMovies = ({ movies }) => {
           s.moveToIdx(1, true, animation);
         },
         updated(s) {
-          s.moveToIdx(s.track.details.abs + 1, true, animation);
+          s.moveToIdx(s.track?.details?.abs + 1, true, animation);
         },
         animationEnded(s) {
-          s.moveToIdx(s.track.details.abs + 1, true, animation);
+          s.moveToIdx(s.track?.details?.abs + 1, true, animation);
         },
       });
-    }, 1000);
+    };
+
+    if (id) {
+      handleMovies(id);
+    }
     return () => {
       setOptionsConfig({});
-      clearTimeout(SET_ID);
     };
-  }, [id]);
+  }, [id, fetchUrl, tv]);
   const handleNav = (id) => {
-    navigate(`/movie/${id}`);
+    if (tv) navigate(`/tv/${id}`);
+    else navigate(`/movie/${id}`);
   };
+  if (!id) return <Loader />;
   return (
     <div className="container actor-movies">
+      <h3 className="actor-movies-title">
+        {name}'s {tv ? "TV Shows" : "Movies"}
+      </h3>
       <div ref={sliderRef} className="keen-slider">
-        {movies?.map((movie) => (
+        {movies?.map((movie, index) => (
           <div
             className="keen-slider__slide number-slide"
-            key={movie?.id}
+            key={`${movie?.id}-${index}`}
             onClick={() => handleNav(movie?.id)}
           >
             <img
               // className={`row__poster ${!loaded && "hidden"}`}
               className={`row__poster`}
               src={
-                movie.poster_path
+                movie?.poster_path
                   ? `${base_url}${movie?.poster_path}`
                   : "https://www.telkomsel.com/sites/default/files/product_banner_image/netflix-right-LANDING.png"
               }

@@ -12,18 +12,14 @@ import "../style/MovieDetails.css";
 const ActorDetailsScreen = () => {
   const { id } = useParams();
   const [actor, setActor] = useState(null);
-  const [actorFilms, setActorFilms] = useState([]);
 
   useEffect(() => {
-    const handleActorAndFilms = async (id) => {
+    const handleActor = async (id) => {
       const actor = await instance.get(Requests.fetchActor(id));
-      const actorFilms = await instance.get(Requests.fetchActorFilms(id));
       setActor(actor.data);
-      setActorFilms(actorFilms.data.results);
-      // console.log("actor => ", actor.data, "films=>", actorFilms.data.results);
     };
     if (id) {
-      handleActorAndFilms(id);
+      handleActor(id);
     }
   }, [id]);
   if (!id) return <Loader />;
@@ -31,7 +27,12 @@ const ActorDetailsScreen = () => {
     <>
       <NavBar />
       <ActorDetails actor={actor} />
-      <ActorMovies movies={actorFilms} />
+      <ActorMovies fetchUrl={Requests.fetchActorFilms(id)} name={actor?.name} />
+      <ActorMovies
+        tv
+        fetchUrl={Requests.fetchActorTvShows(id)}
+        name={actor?.name}
+      />
     </>
   );
 };

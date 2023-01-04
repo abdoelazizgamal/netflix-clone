@@ -1,10 +1,14 @@
-import React from "react";
-import instance from "../axios";
-import Requests from "../Requests";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Geners = ({ geners }) => {
-  const handleGeners = async (id) => {
-    const res = await instance.get(Requests.fetchGenres(id));
+  const location = useLocation();
+  // console.log(location);
+  const navigate = useNavigate();
+  const handleGeners = (id) => {
+    if (location.pathname.includes("/movie/"))
+      navigate(`/movie/category/${id}`);
+    else navigate(`/tv/category/${id}`);
+    // const res = await instance.get(Requests.fetchGenres(id));
   };
   return (
     <div className="geners">

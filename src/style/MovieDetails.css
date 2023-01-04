@@ -6,6 +6,7 @@
     flex-wrap: wrap;
     margin-top: 70px;
     padding-top: 50px;
+    align-items: flex-start;
 }
 .img-details
 {
@@ -107,6 +108,7 @@
 {
     color: #fff;
     margin-top: 20px;
+    margin-bottom: 5px;
 }
 .actor-movies.container
 {
@@ -134,5 +136,119 @@
 {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* object-fit: cover; */
+}
+.img-details{
+    position: relative;
+    overflow: hidden;
+}
+.img-details:hover .player
+{
+    transform: scale(1);
+    transition: transform .3s ease-in-out;
+}
+.player
+{
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0,0,.5);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transform: scale(0);
+    
+    transform-origin:  left;
+}
+.player img
+{
+    width: 96px;
+    height: 96px;
+    animation:  player 2s ease-in-out infinite alternate-reverse;
+    box-shadow: none;
+}
+@keyframes player
+{
+    0%
+    {
+        transform: scale(.90);
+    }
+    100%
+    {
+        transform: scale(1);
+    }
+}
+.ReactModal__Overlay
+{
+    z-index: 99999;
+    background-color: rgba(28, 27, 27,.65) !important;
+    color: #fff;
+
+}
+.ReactModal__Content 
+{
+    background-color: #1c1b1b !important;
+    border-color: #1c1b1b !important;
+    transform: translateY(-100%);
+    padding: 40px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ReactModal__Content--after-open
+{
+    transform: translateY(0);
+
+        transition: transform .5s ease-in-out   ;
+}
+.close-modal-btn
+{
+    position: absolute;
+    top: 1px;
+    width: 38px;
+    right: 1px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.2rem;
+    background: #1c1b1b;
+    box-shadow: 0 0 2px rgb(120 120 120 / 65%);
+}
+.ReactModal__Content  p
+{
+    font-size: 1.5rem;
+}
+.youtube-video
+{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media (max-width :768px) {
+    .movie-details.container .img-details
+    {
+        width: 95%;
+        max-height: 600px;
+    }
+    .movie-details.container .movie-info
+    {
+        width: 100%;
+    }
+}
+@media (max-width:776px) {
+    .ReactModal__Content
+    {
+        inset: 10px !important;
+        padding: 20px !important;
+    }
+    
 }

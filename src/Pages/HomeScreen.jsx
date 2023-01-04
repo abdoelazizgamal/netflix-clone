@@ -24,6 +24,18 @@ const HomeScreen = () => {
         fetchUrl={Requests.fetchUpcoming}
         isLargeRow
       />
+      <Row
+        title="Top Rated TV shows"
+        fetchUrl={Requests.fetchTopRatedTvSeasons}
+        isLargeRow
+        tv
+      />
+      <Row
+        title="Popular TV shows"
+        fetchUrl={Requests.fetchPopularTv}
+        isLargeRow
+        tv
+      />
       {/* <Row
         title="NETFLIX  ORIGINALS"
         fetchUrl={Requests.fetchNetflixOriginals}

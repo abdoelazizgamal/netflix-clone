@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { base_url } from "../Constant";
 // import Loader from "./Loader";
 
-const Row = ({ title, fetchUrl, isLargeRow = false }) => {
+const Row = ({ title, fetchUrl, isLargeRow = false, tv = false }) => {
   const [movies, setMovies] = useState([]);
   // const [loaded, setLoaded] = useState(false);
   const [details, setDetails] = useState(null);
@@ -28,6 +28,7 @@ const Row = ({ title, fetchUrl, isLargeRow = false }) => {
   useEffect(() => {
     const fetchMovies = async () => {
       const response = await instance.get(fetchUrl);
+
       setMovies(response.data.results);
       setOptions({
         initial: 0,
@@ -66,9 +67,12 @@ const Row = ({ title, fetchUrl, isLargeRow = false }) => {
   }, [fetchUrl]);
 
   const handleNaV = (id) => {
-    navigate(`/movie/${id}`);
+    if (tv) navigate(`/tv/${id}`);
+    else {
+      navigate(`/movie/${id}`);
+    }
   };
-  //   console.log(movies);
+
   return (
     <div className="row container">
       <h2>{title}</h2>
@@ -86,7 +90,12 @@ const Row = ({ title, fetchUrl, isLargeRow = false }) => {
             onClick={() => handleNaV(movie?.id)}
           >
             <div className="movie-name">
-              <h5>{movie?.title || movie?.original_title}</h5>
+              <h5>
+                {movie?.title ||
+                  movie?.original_title ||
+                  movie?.name ||
+                  movie?.original_name}{" "}
+              </h5>
             </div>
             <div style={scaleStyle(index)}>
               {/* {loaded ? null : <Loader />} */}
