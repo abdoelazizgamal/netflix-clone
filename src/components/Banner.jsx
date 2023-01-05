@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Requests from "../Requests";
 import "../style/Banner.css";
-import { base_url } from "../Constant";
+import { base_url, DefaultBannerImage } from "../Constant";
 import { Loader, TrailerModal } from "./";
 import { useLocation } from "react-router-dom";
 import useAxios from "../hooks/useAxios";
@@ -39,7 +39,6 @@ const Banner = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
-  // if (!movie) return <Loader />;
   const handleModal = () => setIsOpen(true);
   if (errorMovie || errorGetMovies) {
     notifyErorr("error Fetching Data , Please Reload The Page");
@@ -52,7 +51,7 @@ const Banner = () => {
           backgroundImage: `url( ${
             movie?.backdrop_path
               ? `${base_url}/${movie?.backdrop_path}`
-              : "https://sm.ign.com/ign_mear/screenshot/default/netflix-blog-cover_gese.jpg"
+              : DefaultBannerImage
           })`,
         }}
       >

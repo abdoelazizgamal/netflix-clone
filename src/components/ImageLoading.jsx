@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { DefaultImage } from "../Constant";
 
 import Loader from "./Loader";
 const base_url = "https://image.tmdb.org/t/p/original/";
@@ -16,7 +17,7 @@ const ImageLoading = ({
     if (posterPath && backdropPath) {
       return `${base_url}${isLargeBoolean ? posterPath : backdropPath}`;
     } else {
-      return "https://www.telkomsel.com/sites/default/files/product_banner_image/netflix-right-LANDING.png";
+      return DefaultImage;
     }
   }, [isLargeBoolean, posterPath, backdropPath]);
   return (

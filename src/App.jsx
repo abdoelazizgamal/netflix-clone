@@ -57,7 +57,7 @@ function App() {
           <Route path="/actor/:id" element={<ActorDetailsScreen />} />
           <Route path="/:type/category/:id" element={<Category />} />
           <Route path="/search/:term" element={<SearchPage />} />
-          {/* <Route path="/*" element={<Navigate to="/" />} /> */}
+          <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       )}
     </div>

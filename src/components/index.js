@@ -7,3 +7,5 @@ export { default as Error } from "./Error";
 export { default as Row } from "./Row";
 export { default as CardsContainer } from "./CardsContainer";
 export { default as CategoryTitle } from "./CategoryTitle";
+export { default as ActorDetails } from "./ActorDetails";
+export { default as ActorMovies } from "./ActorMovies";

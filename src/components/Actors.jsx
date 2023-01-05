@@ -1,15 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { base_url } from "../Constant";
+import { AvatarImg, base_url } from "../Constant";
 
 const Actors = ({ actors }) => {
   const navigate = useNavigate();
-  const handleActorNav = async (id) => {
+  const handleActorNav = (id) => {
     navigate(`/actor/${id}`);
   };
-  const imgUrl =
-    "https://www.getillustrations.com/photos/pack/3d-avatar-male_lg.png";
+  const imgUrl = AvatarImg;
   return (
     <>
       <div className="actors">

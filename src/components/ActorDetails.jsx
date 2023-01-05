@@ -1,9 +1,9 @@
-import { base_url } from "../Constant";
+import { AvatarImg, base_url } from "../Constant";
 
 const ActorDetails = ({ actor }) => {
   const ImageLink = actor?.profile_path
     ? `${base_url}${actor?.profile_path}`
-    : "https://www.getillustrations.com/photos/pack/3d-avatar-male_lg.png";
+    : AvatarImg;
 
   return (
     <div className="movie-details container">

@@ -1,13 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { base_url } from "../Constant";
-const defaultImage =
-  "https://www.telkomsel.com/sites/default/files/product_banner_image/netflix-right-LANDING.png";
+import { base_url, DefaultImage } from "../Constant";
+
 const Card = ({ item, tv }) => {
   let imageLink;
   if (item?.poster_path) {
     imageLink = `${base_url}${item?.poster_path}`;
   } else {
-    imageLink = defaultImage;
+    imageLink = DefaultImage;
   }
   const starsValue = "".padStart(Math.round(item?.vote_average) * 2, "🌟");
   const { type } = useParams();

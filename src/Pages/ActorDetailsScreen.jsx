@@ -1,38 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import instance from "../axios";
-
-import ActorDetails from "../components/ActorDetails";
-import ActorMovies from "../components/ActorMovies";
-import Loader from "../components/Loader";
-
-import NavBar from "../components/NavBar";
+import { Loader, NavBar, ActorDetails, ActorMovies } from "../components/.";
+import { notifyErorr } from "../helpers/Toast";
+import useAxios from "../hooks/useAxios";
 import Requests from "../Requests";
 import "../style/MovieDetails.css";
 const ActorDetailsScreen = () => {
   const { id } = useParams();
-  const [actor, setActor] = useState(null);
+  const {
+    data: actor,
+    loading: isActorLoading,
+    error: errorActor,
+    doFetch: GetActor,
+  } = useAxios();
 
   useEffect(() => {
-    const handleActor = async (id) => {
-      const actor = await instance.get(Requests.fetchActor(id));
-      setActor(actor.data);
-    };
     if (id) {
-      handleActor(id);
+      GetActor(Requests.fetchActor(id));
     }
-  }, [id]);
-  if (!id) return <Loader />;
+  }, [id, GetActor]);
+  if (errorActor) notifyErorr(errorActor);
   return (
     <>
       <NavBar />
-      <ActorDetails actor={actor} />
-      <ActorMovies fetchUrl={Requests.fetchActorFilms(id)} name={actor?.name} />
-      <ActorMovies
-        tv
-        fetchUrl={Requests.fetchActorTvShows(id)}
-        name={actor?.name}
-      />
+      {!isActorLoading ? (
+        <>
+          <ActorDetails actor={actor} />
+          <ActorMovies
+            fetchUrl={Requests.fetchActorFilms(id)}
+            name={actor?.name}
+          />
+          <ActorMovies
+            tv
+            fetchUrl={Requests.fetchActorTvShows(id)}
+            name={actor?.name}
+          />
+        </>
+      ) : (
+        <Loader />
+      )}
     </>
   );
 };
