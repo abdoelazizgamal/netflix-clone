@@ -7,7 +7,6 @@ import Requests from "../Requests";
 const CategoryTitle = () => {
   const { type, id } = useParams();
   const { data, doFetch: fetchMoviesGenresList } = useAxios();
-  console.log(data);
   useEffect(() => {
     if (type === "movie") fetchMoviesGenresList(Requests.fetchGenersList);
     else fetchMoviesGenresList(Requests.fetchGenersTvList);

@@ -1,5 +1,5 @@
-import Card from "../components/Card";
-import Loader from "../components/Loader";
+import Card from "./Card";
+import Loader from "./Loader";
 const CardsContainer = ({ data, style }) => {
   if (!(data?.length > 0)) <Loader />;
   return (

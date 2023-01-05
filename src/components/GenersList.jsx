@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-const GenersList = ({ list, title }) => {
+const GenersList = ({ list, title, setShowSidebar }) => {
   const navigate = useNavigate();
   const handleGeners = (id) => {
-    if (title === "Film's Categories") {
-      navigate(`/movie/category/${id}`);
-    } else {
-      navigate(`/tv/category/${id}`);
-    }
+    if (title === "Film's Categories") navigate(`/movie/category/${id}`);
+    else navigate(`/tv/category/${id}`);
+    setShowSidebar(false);
   };
   return (
     <>

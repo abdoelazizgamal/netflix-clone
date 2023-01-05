@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import instance from "../axios";
-import MovieDetails from "../components/MovieDetails";
-import NavBar from "../components/NavBar";
-import Recommendition from "../components/Recommendition";
-import TrailerModal from "../components/TrailerModal";
+import {
+  Loader,
+  NavBar,
+  MovieDetails,
+  Recommendition,
+  TrailerModal,
+  Error,
+} from "../components/.";
+import useAxios from "../hooks/useAxios";
 import Requests from "../Requests";
 import "../style/MovieDetails.css";
 const MovieDetailsScreen = () => {
-  const [movie, setMovie] = useState();
   const [modalIsOpen, setIsOpen] = useState(false);
-
+  const {
+    data: movie,
+    loading: moviesIsLoading,
+    error: errorOfMovie,
+    doFetch: FetchMovieDetails,
+  } = useAxios();
   const { id } = useParams();
   const { pathname } = useLocation();
 
@@ -18,28 +26,29 @@ const MovieDetailsScreen = () => {
     setIsOpen(false);
   }, [pathname]);
   useEffect(() => {
-    const fetchMovie = async () => {
-      if (pathname.includes("/tv/")) {
-        const response = await instance.get(Requests.fetchTv(id));
-        setMovie(response.data);
-        return response;
-      }
-      const response = await instance.get(Requests.fetchMovie(id));
-      setMovie(response.data);
-      return response;
-    };
-    if (id) fetchMovie(id);
-  }, [id, pathname]);
+    if (id) {
+      if (pathname.includes("/tv/")) FetchMovieDetails(Requests.fetchTv(id));
+      else FetchMovieDetails(Requests.fetchMovie(id));
+    }
+  }, [id, pathname, FetchMovieDetails]);
+
   return (
     <>
+      {moviesIsLoading && <Loader />}
       <NavBar />
-      <MovieDetails movie={movie} setIsOpen={setIsOpen} />
-      <Recommendition id={movie?.id} />
-      <TrailerModal
-        modalIsOpen={modalIsOpen}
-        setIsOpen={setIsOpen}
-        movie={movie}
-      />
+      {errorOfMovie ? (
+        <Error error={errorOfMovie} style={{ marginTop: "70px" }} />
+      ) : (
+        <>
+          <MovieDetails movie={movie} setIsOpen={setIsOpen} />
+          <Recommendition id={movie?.id} />
+          <TrailerModal
+            modalIsOpen={modalIsOpen}
+            setIsOpen={setIsOpen}
+            movie={movie}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -39,3 +39,7 @@ code {
 {
   overflow-y: hidden;
 }
+.Toastify
+{
+  z-index: 999999;
+}

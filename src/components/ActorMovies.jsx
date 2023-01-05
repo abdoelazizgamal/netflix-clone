@@ -1,7 +1,7 @@
 import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
+
 import { useEffect, useState } from "react";
-import { base_url } from "../Constant";
+import { base_url, ObjectConfig } from "../Constant";
 import { useNavigate, useParams } from "react-router-dom";
 import instance from "../axios";
 
@@ -22,28 +22,7 @@ const ActorMovies = ({ fetchUrl, name, tv = false }) => {
       if (tv) setMovies(actorFilms.data.cast);
       else setMovies(actorFilms.data.results);
       setOptionsConfig({
-        loop: true,
-        initial: 0,
-        breakpoints: {
-          "(max-width: 776px)": {
-            slides: {
-              perView: 2,
-              spacing: 15,
-            },
-          },
-          "(min-width: 776px)": {
-            slides: {
-              perView: 4,
-              spacing: 15,
-            },
-          },
-          "(min-width: 1200px)": {
-            slides: {
-              perView: 6,
-              spacing: 15,
-            },
-          },
-        },
+        ...ObjectConfig,
         renderMode: "performance",
         drag: true,
         created(s) {

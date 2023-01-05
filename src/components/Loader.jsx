@@ -1,7 +1,7 @@
 import { HashLoader } from "react-spinners";
-const Loader = () => {
+const Loader = ({ style }) => {
   return (
-    <div className="loader">
+    <div className="loader" style={{ ...style }}>
       <HashLoader color="#E50914" size={70} />
     </div>
   );

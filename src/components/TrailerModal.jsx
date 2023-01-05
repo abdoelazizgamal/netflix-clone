@@ -41,7 +41,7 @@ const TrailerModal = ({ modalIsOpen, setIsOpen, movie }) => {
           ❌
         </button>
         <div className="youtube-video">
-          {movie?.videos.results.length === 0 ? (
+          {movie?.videos?.results?.length === 0 ? (
             <p>There is No Trailer Video For This Movie</p>
           ) : null}
           {trailer?.length > 0 && (

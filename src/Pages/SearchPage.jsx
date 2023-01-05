@@ -1,55 +1,65 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import instance from "../axios";
-import NavBar from "../components/NavBar";
+import { NavBar, Loader, CardsContainer, Error } from "../components/.";
 import Requests from "../Requests";
 import Pagination from "rc-pagination";
 import { JumpNextIcon, JumpPrevIcon, NextIcon, PrevIcon } from "../SVG";
 import "../style/Category.css";
-import CardsContainer from "./CardsContainer";
-import Loader from "../components/Loader";
+import useAxios from "../hooks/useAxios";
+
 const SearchPage = () => {
   const { term } = useParams();
-  //   console.log(term);
-  const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(null);
-  //   const [results, setResults] = useState(null);
-
-  const handleClick = (page) => {
-    setPage(page);
-  };
+  const {
+    data: moviesData,
+    loading: moviesIsLoading,
+    error: moviesError,
+    doFetch: fetchSearch,
+  } = useAxios();
+  const handleClick = (page) => setPage(page);
   useEffect(() => {
-    const getMoviesByCategories = async () => {
-      const res = await instance.get(Requests.search(term, page));
-      //   console.log(res);
-      setMovies(res.data.results);
-      setPages(res.data.total_pages);
-    };
-    getMoviesByCategories();
-    return () => {
-      setMovies([]);
-      setPages(null);
-    };
-  }, [term, page]);
+    fetchSearch(Requests.search(term, page));
+  }, [term, page, fetchSearch]);
+  useEffect(() => {
+    return () => setPage(1);
+  }, [term]);
+
   //   console.log(movies, pages, page);
-  const pageNumber = pages > 500 ? 500 : pages;
-  if (!(movies.length > 0) || !pages) return <Loader />;
+  const pageNumber =
+    moviesData?.total_pages > 500 ? 500 : moviesData?.total_pages || 0;
+
   return (
     <>
+      {moviesIsLoading && <Loader />}
       <NavBar />
-      <CardsContainer data={movies} style={{ marginTop: "70px" }} />
-      <div className="pagination-category container">
-        <Pagination
-          total={pageNumber * 10}
-          current={page}
-          onChange={handleClick}
-          prevIcon={PrevIcon}
-          nextIcon={NextIcon}
-          jumpNextIcon={JumpNextIcon}
-          jumpPrevIcon={JumpPrevIcon}
+      {!moviesData?.results?.length > 0 && (
+        <Error
+          style={{ marginTop: "70px" }}
+          error
+          title={`There is no Search Result for ${term}`}
         />
-      </div>
+      )}
+      {moviesError ? (
+        <Error error={moviesError} />
+      ) : (
+        <>
+          <CardsContainer
+            data={moviesData?.results}
+            style={{ marginTop: "70px" }}
+          />
+          <div className="pagination-category container">
+            <Pagination
+              total={pageNumber * 10}
+              current={page}
+              onChange={handleClick}
+              prevIcon={PrevIcon}
+              nextIcon={NextIcon}
+              jumpNextIcon={JumpNextIcon}
+              jumpPrevIcon={JumpPrevIcon}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };

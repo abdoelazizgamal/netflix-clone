@@ -10,17 +10,17 @@ const useAxios = () => {
     try {
       let res;
       if (args.length > 0) {
-        console.log(fetchUrl(...args));
         res = await instance.get(fetchUrl(...args));
       } else {
         res = await instance.get(fetchUrl);
       }
-      // console.log(res, "res");
+
       setData(res.data);
     } catch (error) {
       setErorr(error.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   return { data, loading, error, doFetch };

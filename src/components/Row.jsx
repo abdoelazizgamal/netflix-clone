@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import instance from "../axios";
 
 import "../style/Row.css";
-import "keen-slider/keen-slider.min.css";
+
 import { useKeenSlider } from "keen-slider/react";
 import { useNavigate } from "react-router-dom";
-import { base_url } from "../Constant";
+import { base_url, ObjectConfig } from "../Constant";
 // import Loader from "./Loader";
 
 const Row = ({ title, fetchUrl, isLargeRow = false, tv = false }) => {
@@ -31,28 +31,7 @@ const Row = ({ title, fetchUrl, isLargeRow = false, tv = false }) => {
 
       setMovies(response.data.results);
       setOptions({
-        initial: 0,
-        breakpoints: {
-          "(max-width: 776px)": {
-            slides: {
-              perView: 2,
-              spacing: 15,
-            },
-          },
-          "(min-width: 776px)": {
-            slides: {
-              perView: 4,
-              spacing: 15,
-            },
-          },
-          "(min-width: 1200px)": {
-            slides: {
-              perView: 6,
-              spacing: 15,
-            },
-          },
-        },
-        loop: true,
+        ...ObjectConfig,
         detailsChanged(s) {
           setDetails(s.track.details);
         },

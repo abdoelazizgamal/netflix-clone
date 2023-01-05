@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import NavBar from "../components/NavBar";
 import Requests from "../Requests";
 import Pagination from "rc-pagination";
 import { JumpNextIcon, JumpPrevIcon, NextIcon, PrevIcon } from "../SVG";
 import "../style/Category.css";
-import CardsContainer from "./CardsContainer";
-import Loader from "../components/Loader";
-import CategoryTitle from "../components/CategoryTitle";
+import {
+  CardsContainer,
+  Loader,
+  CategoryTitle,
+  Error,
+  NavBar,
+} from "../components/.";
 import useAxios from "../hooks/useAxios";
-import Error from "../components/Error";
 const Category = () => {
   const { id, type } = useParams();
   const [page, setPage] = useState(1);
@@ -25,13 +27,14 @@ const Category = () => {
     else fetchSpecificGenres(Requests.fetchTvGenres, id, page);
   }, [page, id, fetchSpecificGenres, type, moviesData?.total_pages]);
   const pageNumber =
-    (moviesData?.total_pages > 500 ? 500 : moviesData?.total_pages) * 10;
+    (moviesData?.total_pages > 500 ? 500 : moviesData?.total_pages) * 10 || 0;
   useEffect(() => {
     return () => setPage(1);
   }, [id]);
-  if (moviesIsLoading) return <Loader />;
+
   return (
     <>
+      {moviesIsLoading && <Loader />}
       <NavBar />
       <CategoryTitle />
       {moviesError ? (

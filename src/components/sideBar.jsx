@@ -49,6 +49,8 @@ const SideBar = ({ showSidebar, setShowSidebar }) => {
     if (searchValue) {
       navigate(`/search/${searchValue}`);
     } else notifyErorr("Please Enter Search Term");
+
+    setShowSidebar(false);
   };
   return (
     <>
@@ -71,11 +73,13 @@ const SideBar = ({ showSidebar, setShowSidebar }) => {
           />
 
           <GenersList
+            setShowSidebar={setShowSidebar}
             list={moviesGenresList?.genres}
             title="Film's Categories"
           />
           <Error error={errorMoviesGenresList} />
           <GenersList
+            setShowSidebar={setShowSidebar}
             list={tvGenresList?.genres}
             title="TV Show's Categories"
           />

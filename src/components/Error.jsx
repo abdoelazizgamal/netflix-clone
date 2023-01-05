@@ -1,5 +1,11 @@
-const Error = ({ error }) => {
-  return error && <p className="container error">error Fetching Data..</p>;
+const Error = ({ title, error, style }) => {
+  return (
+    error && (
+      <p style={{ ...style }} className="container error">
+        {title ? title : "error Fetching Data.."}
+      </p>
+    )
+  );
 };
 
 export default Error;

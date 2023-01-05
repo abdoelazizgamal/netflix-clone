@@ -1,35 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Requests from "../Requests";
 import "../style/Banner.css";
-import instance from "../axios";
 import { base_url } from "../Constant";
-import Loader from "./Loader";
-import TrailerModal from "./TrailerModal";
+import { Loader, TrailerModal } from "./";
 import { useLocation } from "react-router-dom";
+import useAxios from "../hooks/useAxios";
+import { notifyErorr } from "../helpers/Toast";
 const Banner = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
-  const [movie, setMovie] = useState(null);
+
+  const {
+    data: movie,
+    error: errorMovie,
+    doFetch: fetchMovieByID,
+  } = useAxios();
+  const {
+    data: movies,
+    error: errorGetMovies,
+    doFetch: fetchMovies,
+  } = useAxios();
   const truncate = (str, n) =>
     str.length > n ? str.substr(0, n - 1) + "..." : str;
+
+  const randomId = useMemo(
+    () =>
+      movies?.results?.[Math.floor(Math.random() * movies?.results?.length - 1)]
+        ?.id,
+    [movies]
+  );
+
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await instance.get(Requests.fetchPopular);
-      const randomMovie =
-        response.data.results[
-          Math.floor(Math.random() * response?.data?.results?.length - 1)
-        ];
-      const movie = await instance.get(Requests.fetchMovie(randomMovie?.id));
-      setMovie(movie.data);
-      return response;
-    };
-    fetchData();
-  }, []);
+    fetchMovies(Requests.fetchPopular);
+  }, [fetchMovies]);
+  useEffect(() => {
+    if (randomId) fetchMovieByID(Requests.fetchMovie, randomId);
+  }, [randomId, fetchMovieByID]);
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
-  if (!movie) return <Loader />;
+  // if (!movie) return <Loader />;
   const handleModal = () => setIsOpen(true);
+  if (errorMovie || errorGetMovies) {
+    notifyErorr("error Fetching Data , Please Reload The Page");
+  }
   return (
     <>
       <header
@@ -42,20 +56,25 @@ const Banner = () => {
           })`,
         }}
       >
-        <div className="banner__contents container">
-          <h1 className="banner__title">
-            {movie?.original_title || movie?.title}
-          </h1>
-          <div className="banner__buttons">
-            <button className="banner__button" onClick={handleModal}>
-              Play
-            </button>
-            <button className="banner__button">My List</button>
+        {movie?.length === 0 ? (
+          <Loader style={{ position: "absolute" }} />
+        ) : (
+          <div className="banner__contents container">
+            <h1 className="banner__title">
+              {movie?.original_title || movie?.title}
+            </h1>
+            <div className="banner__buttons">
+              <button className="banner__button" onClick={handleModal}>
+                Play
+              </button>
+              <button className="banner__button">My List</button>
+            </div>
+            <h1 className="banner__description">
+              {movie?.overview && truncate(`${movie?.overview}`, 130)}
+            </h1>
           </div>
-          <h1 className="banner__description">
-            {true && truncate(`${movie?.overview}`, 130)}
-          </h1>
-        </div>
+        )}
+
         <div className="banner__fadeBottom" />
       </header>
       <TrailerModal
