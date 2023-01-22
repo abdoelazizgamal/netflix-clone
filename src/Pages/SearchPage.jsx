@@ -48,15 +48,19 @@ const SearchPage = () => {
             style={{ marginTop: "70px" }}
           />
           <div className="pagination-category container">
-            <Pagination
-              total={pageNumber * 10}
-              current={page}
-              onChange={handleClick}
-              prevIcon={PrevIcon}
-              nextIcon={NextIcon}
-              jumpNextIcon={JumpNextIcon}
-              jumpPrevIcon={JumpPrevIcon}
-            />
+            {moviesData.length > 0 ? (
+              <Pagination
+                total={pageNumber * 10}
+                current={page}
+                onChange={handleClick}
+                prevIcon={PrevIcon}
+                nextIcon={NextIcon}
+                jumpNextIcon={JumpNextIcon}
+                jumpPrevIcon={JumpPrevIcon}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </>
       )}
