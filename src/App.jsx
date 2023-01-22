@@ -21,7 +21,10 @@ import MovieDetailsScreen from "./Pages/MovieDetailsScreen";
 import ActorDetailsScreen from "./Pages/ActorDetailsScreen";
 import Category from "./Pages/Category";
 import SearchPage from "./Pages/SearchPage";
+import useAlan from "./components/Alan";
+import { useRef } from "react";
 function App() {
+  const alanBtnContainer = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useUserSelector();
@@ -43,22 +46,26 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+  useAlan();
   return (
     <div className="app">
       <ToastContainer />
       {!user ? (
         <LoginScreen />
       ) : (
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/profile" element={<ProfileScreen />} />
-          <Route path="/movie/:id" element={<MovieDetailsScreen />} />
-          <Route path="/tv/:id" element={<MovieDetailsScreen />} />
-          <Route path="/actor/:id" element={<ActorDetailsScreen />} />
-          <Route path="/:type/category/:id" element={<Category />} />
-          <Route path="/search/:term" element={<SearchPage />} />
-          <Route path="/*" element={<Navigate to="/" />} />
-        </Routes>
+        <>
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/movie/:id" element={<MovieDetailsScreen />} />
+            <Route path="/tv/:id" element={<MovieDetailsScreen />} />
+            <Route path="/actor/:id" element={<ActorDetailsScreen />} />
+            <Route path="/:type/category/:id" element={<Category />} />
+            <Route path="/search/:term" element={<SearchPage />} />
+            <Route path="/*" element={<Navigate to="/" />} />
+          </Routes>
+          <div ref={alanBtnContainer} />
+        </>
       )}
     </div>
   );

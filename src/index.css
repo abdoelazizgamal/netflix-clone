@@ -43,3 +43,7 @@ code {
 {
   z-index: 999999;
 }
+.alanBtn-bg-default
+{
+  background: linear-gradient(to right, #8e0e00, #1f1c18) !important; 
+}
